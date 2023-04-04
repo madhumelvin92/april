@@ -1,0 +1,61 @@
+import plotly.express as px
+import pandas as pd
+import plotly.graph_objects as go
+
+
+df = pd.read_csv("/Users/mravikumar/Desktop/phen_cyt2.csv")
+
+
+# calculate percentage of each vendor's sales out of the total for each sector
+# for killer in df["Killers"].unique():
+#     killer_df = df[df["Killers"] == killer]
+#     total_values = killer_df["Values"].sum()
+#     killer_df["values_pct"] = killer_df["Values"] / total_values * 100
+#     killer_df["values_pct_str"] = killer_df["values_pct"].round(2).astype(str) + '%'
+#     df.loc[killer_df.index, "values_pct"] = killer_df["values_pct"]
+#     df.loc[killer_df.index, "values_pct_str"] = killer_df["values_pct_str"]
+
+# fig = px.sunburst(df, path=['Sub', 'Killers', 'Phen_cyt'], values= 'Values',
+#                   color='Killers', color_discrete_sequence=px.colors.qualitative.Set2, names='Killers'
+#                   # hover_data={'values_pct':':.2f', 'values_pct_str': False
+# )
+#
+# fig.update_traces(textinfo='label+text',
+#                   hovertemplate='<b>%{label}</b><br>' +
+#                                 'Value: %{value}<br>' +
+#                                 'Percentage: %{customdata[0]}')
+# fig.show()
+
+df = pd.read_csv("/Users/mravikumar/Desktop/pheno_cyt.csv")
+
+# # assign colors based on the 'kill' category
+# color_map_kill = {'fast_killers': 'red', 'medium_killers': 'green',
+#                   'slow_killers': 'yellow','No_Cytotoxicity': 'blue'}
+# df['color_kill'] = df['Killers'].map(color_map_kill)
+#
+# color_map_cyt = {'single': 'grey', 'double': 'black', 'triple': 'orange'}
+# df['color_cyto'] = df['Cytokines'].map(color_map_cyt)
+#
+# # merge the two color columns
+# df['color'] = df.apply(lambda row: row['color_kill'] if row['color_cyto'] == '' else row['color_cyto'], axis=1)
+
+# create the sunburst chart
+fig = px.sunburst(df, path=['Sub', 'Killers', 'Phenotype','Cytokines'], values= 'Values')
+color_mapping = {'single': 'red', 'double': 'forestgreen', 'triple': 'mediumblue', 'fast_killers': 'IndianRed ', 'medium_killers': 'orange',
+                 'slow_killers': 'brown','No_Cytotoxicity':'LightSlateGray',
+                 "f_CD8+":"LightSalmon","f_CD8-":"LightSalmon","f_undetermined":'LightSalmon',
+                 "n_CD8+":'LightSteelBlue', "n_CD8-":'LightSteelBlue',"n_undetermined":'LightSteelBlue',
+                 "s_CD8+":'chocolate',"s_undetermined":'chocolate',  "s_CD8-":'chocolate',
+                  'm_CD8+': "gold", 'm_CD8-': "gold", "m_undetermined":"gold",
+                 "Sub1": "#slategrey"}
+fig.update_traces(marker_colors=[color_mapping[cat] for cat in fig.data[-1].labels])
+
+
+
+fig.update_traces(textinfo='label+text',
+                  hovertemplate='<b>%{label}</b><br>' +
+                                'Value: %{value}<br>' +
+                                'Percentage: %{customdata[0]}')
+
+fig.show()
+
