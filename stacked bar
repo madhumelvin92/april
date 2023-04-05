@@ -1,0 +1,54 @@
+#####-----------doney
+import plotly.graph_objects as go
+
+
+x =['Fast_killers', 'Medium_killers', 'Slow_killers',"No_Killing"]
+y1= [cxcl10_f,cxcl10_m,cxcl10_s,cxcl10_n]
+y2 =[ifng_f,ifng_s,ifng_m,ifng_n]
+y3=[il17a_f,il17a_m,il17a_s,il17a_n]
+
+# y1=[cxcl10_f,ifng_f,il17a_f]
+# y2=[cxcl10_s,ifng_s,il17a_m]
+# y3=[cxcl10_m,ifng_m,il17a_s]
+# y4=[cxcl10_n,ifng_n,il17a_n]
+
+
+# Sum of first, second, third, and fourth numbers in each list
+total_first = sum([y1[0], y2[0], y3[0]])
+total_second = sum([y1[1], y2[1], y3[1]])
+total_third = sum([y1[2], y2[2], y3[2]])
+total_fourth = sum([y1[3], y2[3], y3[3]])
+
+# Calculate percentage for each number based on the total
+percentages_first = [round((num/total_first) * 100) for num in [y1[0], y2[0], y3[0]]]
+percentages_second = [round((num/total_second) * 100) for num in [y1[1], y2[1], y3[1]]]
+percentages_third = [round((num/total_third) * 100) for num in [y1[2], y2[2], y3[2]]]
+percentages_fourth = [round((num/total_fourth) * 100) for num in [y1[3], y2[3], y3[3]]]
+
+# Create new lists for y1, y2, y3 with corresponding percentage values
+y1_percentages = [percentages_first[0], percentages_second[0], percentages_third[0], percentages_fourth[0]]
+y2_percentages = [percentages_first[1], percentages_second[1], percentages_third[1], percentages_fourth[1]]
+y3_percentages = [percentages_first[2], percentages_second[2], percentages_third[2], percentages_fourth[2]]
+
+
+# Create the stacked bar graph
+fig = go.Figure()
+
+# Create a trace for each group with percentage values
+trace1 = go.Bar(x=x, y=y1_percentages, name='CXCL10')
+trace2 = go.Bar(x=x, y=y2_percentages, name='IFNg')
+trace3 = go.Bar(x=x, y=y3_percentages, name='IL7a')
+
+# Create a layout
+layout = go.Layout(
+    title='Percentage of cytokines',
+    xaxis=dict(title='Groups'),
+    yaxis=dict(title='Percentage'),
+    barmode='stack'
+)
+
+# Create a figure object
+fig = go.Figure([trace1, trace2, trace3], layout=layout)
+
+# Show the plot
+fig.show()
